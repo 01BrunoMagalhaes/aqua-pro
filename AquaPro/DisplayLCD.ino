@@ -24,14 +24,10 @@ void displayData(String screen) {
     displayHome();
     lastScreen = "home";
   } else if (verifyLastAndNext("home", screen)) {
-    clearDisplay();
-    lcd.setCursor(0,0);
-    lcd.print("Tomadas");
+    displayPlugs();
     lastScreen = "plugs";
   } else if (verifyLastAndNext("plugs", screen)) {
-    clearDisplay();
-    lcd.setCursor(0,0);
-    lcd.print("Temperatura");
+    displayTemp();
     lastScreen = "temp";
   } else if (verifyLastAndNext("temp", screen)) {
     displayHome();
@@ -41,6 +37,18 @@ void displayData(String screen) {
   lastSelected = "";
 }
 
+void displayPlugs() {
+  clearDisplay();
+  lcd.setCursor(0,0);
+  lcd.print("Tomadas");
+}
+
+void displayTemp() {
+  clearDisplay();
+  lcd.setCursor(0,0);
+  lcd.print("Temperatura");
+}
+
 boolean verifyLastAndNext(String last, String screen) {
   return lastScreen.equals(last) && screen.equals("next");
 }
@@ -48,10 +56,7 @@ boolean verifyLastAndNext(String last, String screen) {
 void displaySwitch() {
 
   if (lastScreen.equals("temp")) {
-    
-    clearDisplay();
-    lcd.setCursor(0,0);
-    lcd.print("Temperatura");
+    displayTemp();
     
     if (lastSelected.equals("ideal")) {
       lcd.setCursor(0,1);
@@ -68,10 +73,7 @@ void displaySwitch() {
     }
     
   } else if (lastScreen.equals("plugs")) {
-
-    clearDisplay();
-    lcd.setCursor(0,0);
-    lcd.print("Tomadas");
+    displayPlugs();
 
     if (lastSelected.equals("plug1")) {
       lcd.setCursor(0,1);
