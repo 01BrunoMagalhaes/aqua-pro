@@ -1,29 +1,98 @@
 LiquidCrystal_I2C lcd(0x27, 16, 2);  // Configura endereço I2C e display com 16 caracteres e 2 linhas 
 int thisChar = 0 ;
+String lastScreen = "home";
+String lastSelected = ""; 
 
 // Custom Character Generator http://omerk.github.io/lcdchargen/
 byte thermometer[8] = {0b00100,0b01010,0b01010,0b01110,0b01110,0b11111,0b11111,0b01110};
-
-byte customChar[8] = {
-  0b00000,
-  0b00100,
-  0b01010,
-  0b01010,
-  0b00100,
-  0b00000,
-  0b00000,
-  0b00000
-};
+byte customChar[8] = {0b00000,0b00100,0b01010,0b01010,0b00100,0b00000,0b00000,0b00000};
 
 void initializeDisplay() {
   lcd.init();                      // inicializa LCD
   turnDisplayOn();
 
-  lcd.createChar(0, thermometer);         // criando o caracter especial 1
+  lcd.createChar(0, thermometer);
   lcd.createChar(1, customChar);
+
+  displayData("home");
+}
+
+void displayData(String screen) {
+  Serial.print(F("Screen: ")); Serial.print(screen); Serial.print(F(" lastScreen: ")); Serial.print(lastScreen);
+
+  if (screen.equals("") || screen.equals("home")) {
+    displayHome();
+    lastScreen = "home";
+  } else if (verifyLastAndNext("home", screen)) {
+    clearDisplay();
+    lcd.setCursor(0,0);
+    lcd.print("Tomadas");
+    lastScreen = "plugs";
+  } else if (verifyLastAndNext("plugs", screen)) {
+    clearDisplay();
+    lcd.setCursor(0,0);
+    lcd.print("Temperatura");
+    lastScreen = "temp";
+  } else if (verifyLastAndNext("temp", screen)) {
+    displayHome();
+    lastScreen = "home";
+  }
+
+  lastSelected = "";
+}
+
+boolean verifyLastAndNext(String last, String screen) {
+  return lastScreen.equals(last) && screen.equals("next");
+}
+
+void displaySwitch() {
+
+  if (lastScreen.equals("temp")) {
+    
+    clearDisplay();
+    lcd.setCursor(0,0);
+    lcd.print("Temperatura");
+    
+    if (lastSelected.equals("ideal")) {
+      lcd.setCursor(0,1);
+      lcd.print("minima 26.0");
+      lastSelected = "min"; 
+    } else if (lastSelected.equals("min")) {
+      lcd.setCursor(0,1);
+      lcd.print("maxima 27.0");
+      lastSelected = "max"; 
+    } else {
+      lcd.setCursor(0,1);
+      lcd.print("ideal 26.5");
+      lastSelected = "ideal";
+    }
+    
+  } else if (lastScreen.equals("plugs")) {
+
+    clearDisplay();
+    lcd.setCursor(0,0);
+    lcd.print("Tomadas");
+
+    if (lastSelected.equals("plug1")) {
+      lcd.setCursor(0,1);
+      lcd.print("2 OFF");
+      lastSelected = "plug2";
+    } else if (lastSelected.equals("plug2")) {
+      lcd.setCursor(0,1);
+      lcd.print("3 OFF");
+      lastSelected = "plug3";
+    } else {
+      lcd.setCursor(0,1);
+      lcd.print("1 OFF");
+      lastSelected = "plug1";
+    }
+  
+  }
+  
 }
 
 void displayHome() {
+  clearDisplay();
   lcd.setCursor(0,0);
   lcd.print("02/02/20 13:06");
   lcd.setCursor(0,1);
@@ -33,8 +102,7 @@ void displayHome() {
   lcd.setCursor(6,1);
   lcd.write(1);
   lcd.setCursor(7,1);
-  lcd.print("C");
-  
+  lcd.print("C");  
 }
 
 void turnDisplayOn() {

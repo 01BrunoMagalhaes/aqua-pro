@@ -8,21 +8,22 @@ int btn3 = 24;
 int btn4 = 25;
 
 void setup() {
+  Serial.begin(9600);
   initializeDisplay();
   initializeButtons(btn1, btn2, btn3, btn4);
-  Serial.begin(9600);
-  displayHome();
 }
 
 
 void loop() {
   if(isButtonPressed(btn1)) {
     Serial.println("Button " + String(btn1) + " pressed!");
-    displayHome();
+    displayData("next");
+    delay(250);
   }
   if(isButtonPressed(btn2)) {
     Serial.println("Button " + String(btn2) + " pressed!");
-    clearDisplay();
+    displaySwitch();
+    delay(250);
   }
   if(isButtonPressed(btn3)) {
     Serial.println("Button " + String(btn3) + " pressed!");
