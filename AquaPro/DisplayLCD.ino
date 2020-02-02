@@ -6,6 +6,8 @@ String lastSelected = "";
 // Custom Character Generator http://omerk.github.io/lcdchargen/
 byte thermometer[8] = {0b00100,0b01010,0b01010,0b01110,0b01110,0b11111,0b11111,0b01110};
 byte customChar[8] = {0b00000,0b00100,0b01010,0b01010,0b00100,0b00000,0b00000,0b00000};
+byte upChar[8] = {0b00100,0b01110,0b11111,0b01110,0b01110,0b01110,0b01110,0b01110};
+byte downChar[8] = {0b01110,0b01110,0b01110,0b01110,0b01110,0b11111,0b01110,0b00100};
 
 void initializeDisplay() {
   lcd.init();                      // inicializa LCD
@@ -13,6 +15,8 @@ void initializeDisplay() {
 
   lcd.createChar(0, thermometer);
   lcd.createChar(1, customChar);
+  lcd.createChar(2, upChar);
+  lcd.createChar(3, downChar);
 
   displayData("home");
 }
@@ -30,6 +34,9 @@ void displayData(String screen) {
     displayTemp();
     lastScreen = "temp";
   } else if (verifyLastAndNext("temp", screen)) {
+    displayIlumination();
+    lastScreen = "ilumination";
+  } else if (verifyLastAndNext("ilumination", screen)) {
     displayHome();
     lastScreen = "home";
   }
@@ -37,16 +44,22 @@ void displayData(String screen) {
   lastSelected = "";
 }
 
+void displayIlumination() {
+  clearDisplay();
+  lcd.setCursor(0,0);
+  lcd.print("ILUMINATION");
+}
+
 void displayPlugs() {
   clearDisplay();
   lcd.setCursor(0,0);
-  lcd.print("Tomadas");
+  lcd.print("PLUGS");
 }
 
 void displayTemp() {
   clearDisplay();
   lcd.setCursor(0,0);
-  lcd.print("Temperatura");
+  lcd.print("TEMPERATURE");
 }
 
 boolean verifyLastAndNext(String last, String screen) {
@@ -60,15 +73,15 @@ void displaySwitch() {
     
     if (lastSelected.equals("ideal")) {
       lcd.setCursor(0,1);
-      lcd.print("minima 26.0");
+      lcd.print("MINIMUM 26.0");
       lastSelected = "min"; 
     } else if (lastSelected.equals("min")) {
       lcd.setCursor(0,1);
-      lcd.print("maxima 27.0");
+      lcd.print("MAXIMUM 27.0");
       lastSelected = "max"; 
     } else {
       lcd.setCursor(0,1);
-      lcd.print("ideal 26.5");
+      lcd.print("IDEAL 26.5");
       lastSelected = "ideal";
     }
     
@@ -89,6 +102,34 @@ void displaySwitch() {
       lastSelected = "plug1";
     }
   
+  } else if (lastScreen.equals("ilumination")) {
+    clearDisplay();
+    lcd.setCursor(0,0);
+
+    if (lastSelected.equals("channel1")){
+      lcd.print("CHANNEL 2 ON");
+      lcd.setCursor(0,1);
+      lcd.write(2);
+      lcd.setCursor(2,1);
+      lcd.print("08:00");
+      lcd.setCursor(8,1);
+      lcd.write(3);
+      lcd.setCursor(10,1);
+      lcd.print("17:00");
+      lastSelected = "channel2";
+    } else {
+      lcd.print("CHANNEL 1 OFF");
+      lcd.setCursor(0,1);
+      lcd.write(2);
+      lcd.setCursor(2,1);
+      lcd.print("08:30");
+      lcd.setCursor(8,1);
+      lcd.write(3);
+      lcd.setCursor(10,1);
+      lcd.print("16:30");
+      lastSelected = "channel1";
+    }
+    
   }
   
 }
