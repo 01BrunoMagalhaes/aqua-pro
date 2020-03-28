@@ -1,11 +1,18 @@
 void initializePlugs() {
   pinMode(relay1, OUTPUT); 
   pinMode(relay2, OUTPUT);
-  pinMode(relay3, OUTPUT); 
+  pinMode(relay3, OUTPUT);
+  pinMode(relayBoia, OUTPUT);
+
+  pinMode(relayHeater, OUTPUT); 
+  pinMode(relayCooler, OUTPUT);
 
   turnRelayOff(relay1);
   turnRelayOff(relay2);
   turnRelayOff(relay3);
+  turnRelayOff(relayHeater);
+  turnRelayOff(relayCooler);
+  turnRelayOff(relayBoia);
 }
 
 String getRelayStatus(int relayPosition) {
@@ -14,12 +21,8 @@ String getRelayStatus(int relayPosition) {
   return s == 1 ? "OFF" : "ON";
 }
 
-void setRelayStatus(int relayPosition) {
-  if (getRelayStatus(relayPosition).equals("OFF")) {
-    digitalWrite(relayPosition, LOW);  //Liga rele
-  } else {
-    digitalWrite(relayPosition, HIGH);  //Liga rele
-  }
+void toggleRelay(int relayPosition) {
+  digitalWrite(relayPosition, !digitalRead(relayPosition));
 }
 
 void turnRelayOn(int relayPosition) {

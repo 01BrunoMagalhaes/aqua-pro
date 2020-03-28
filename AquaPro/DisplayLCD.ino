@@ -1,9 +1,6 @@
-LiquidCrystal_I2C lcd(0x27, 16, 2);  // Configura endereço I2C e display com 16 caracteres e 2 linhas 
 int thisChar = 0 ;
 Screen actualScreen = HOME;
 String lastSelected = "";
-int test = 1;
-
 // Custom Character Generator http://omerk.github.io/lcdchargen/
 byte thermometer[8] = {0b00100,0b01010,0b01010,0b01110,0b01110,0b11111,0b11111,0b01110};
 byte customChar[8] = {0b00000,0b00100,0b01010,0b01010,0b00100,0b00000,0b00000,0b00000};
@@ -22,13 +19,14 @@ void initializeDisplay() {
   displayData(0);
 }
 
-void displayDataThred() {
+void displayDataThread() {
   displayData(0);
 }
 
 void displayData(boolean next) {
-  Serial.print(F(" actualScreen: ")); Serial.print(actualScreen); Serial.print(F(" next: ")); Serial.println(next);
-
+  if (DEBUG) {
+    Serial.print(F("actualScreen: ")); Serial.print(actualScreen); Serial.print(F(" next: ")); Serial.println(next);
+  }
   switch (actualScreen) {
     case HOME:
       if (next) {
@@ -196,11 +194,11 @@ void displaySwitch(boolean refresh) {
 void displaySelect() {
 
   if (lastSelected.equals("plug1")) {
-    setRelayStatus(relay1);
+    toggleRelay(relay1);
   } else if (lastSelected.equals("plug2")) {
-    setRelayStatus(relay2);
+    toggleRelay(relay2);
   } else if (lastSelected.equals("plug3")) {
-    setRelayStatus(relay3);
+    toggleRelay(relay3);
   }
 
   displaySwitch(true);
@@ -229,18 +227,16 @@ void displayTemp(boolean next) {
 
 void displayHome() {
 //  clearDisplay();
-test ++;
     lcd.setCursor(0,0);
-//    lcd.print("02/02/20 13:06");
-lcd.print("02/02/20 " + String(test));
+    lcd.print(clockDateTime());
     lcd.setCursor(0,1);
     lcd.write(0);
     lcd.setCursor(1,1);
-    lcd.print("26.30"); 
+    lcd.print(temp()); 
     lcd.setCursor(6,1);
     lcd.write(1);
     lcd.setCursor(7,1);
-    lcd.print("C");  
+    lcd.print("C"); 
 }
 
 void turnDisplayOn() {
