@@ -15,6 +15,10 @@ void initializePlugs() {
   turnRelayOff(relayBoia);
 }
 
+boolean isRelayOn(int relayPosition) {
+  return !digitalRead(relayPosition);
+}
+
 String getRelayStatus(int relayPosition) {
   int s = digitalRead(relayPosition);
   

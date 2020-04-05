@@ -33,11 +33,11 @@ float temp() {
 void temperatureControl() {
   float temperature = temp();
   if(temperature > 5 && temperature < 50) {
-    if (temperature >= tMax && temperature > tIdeal) {
+    if (temperature >= tMax || (isRelayOn(relayCooler) && temperature > tIdeal)) {
       if(DEBUG) Serial.println(F("Turning coolet on")); 
       turnRelayOff(relayHeater);
       turnRelayOn(relayCooler);
-    } else if (temperature <= tMin && temperature < tIdeal) {
+    } else if (temperature <= tMin || (isRelayOn(relayHeater) && temperature < tIdeal)) {
       if(DEBUG) Serial.println(F("Turning heater on"));
       turnRelayOn(relayHeater);
       turnRelayOff(relayCooler);

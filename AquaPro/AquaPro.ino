@@ -34,9 +34,9 @@ Thread waterLevelThread = Thread();
 Thread tempControlThread = Thread();
 ThreadController threadCtr = ThreadController();
 
-  float tMin = 26;
-  float tMax = 27;
-  float tIdeal = 26.5;
+float tMin = 26;
+float tMax = 27;
+float tIdeal = 26.5;
 
 void setup() {
   Serial.begin(9600);
