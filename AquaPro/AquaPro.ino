@@ -3,6 +3,7 @@
 #include <OneWire.h>
 #include <LiquidCrystal_I2C.h>
 #include <Thread.h>
+#include <ThreadController.h>
 #include <RtcDS3231.h>
 
 #define DEBUG false
@@ -31,6 +32,7 @@ LiquidCrystal_I2C lcd(0x27, 16, 2);
 Thread displayThread = Thread();
 Thread waterLevelThread = Thread();
 Thread tempControlThread = Thread();
+ThreadController threadCtr = ThreadController();
 
   float tMin = 26;
   float tMax = 27;

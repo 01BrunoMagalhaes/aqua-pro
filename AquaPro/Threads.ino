@@ -1,25 +1,18 @@
-void initializeThreads() {
+void initializeThreads() {  
   displayThread.onRun(displayDataThread); //Atribui função a thread.
-  displayThread.setInterval(2000); //Atribui tempo para execução para a Thread.
+  displayThread.setInterval(1000); //Atribui tempo para execução para a Thread.
 
   waterLevelThread.onRun(verifyWaterLevel);
-  waterLevelThread.setInterval(1000);
+  waterLevelThread.setInterval(10);
 
   tempControlThread.onRun(temperatureControl);
   tempControlThread.setInterval(1000);
+
+  threadCtr.add(&displayThread);
+  threadCtr.add(&waterLevelThread);
+  threadCtr.add(&tempControlThread);
 }
 
 void threadsControl() {
-  if (displayThread.shouldRun()) {
-    displayThread.run();  
-  }
-  
-  if (waterLevelThread.shouldRun()) {
-    waterLevelThread.run();  
-  }
-
-  if (tempControlThread.shouldRun()) {
-    tempControlThread.run();  
-  }
-
+  threadCtr.run();
 }
