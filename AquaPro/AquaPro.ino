@@ -38,6 +38,7 @@ Thread displayThread = Thread();
 Thread waterLevelThread = Thread();
 Thread tempControlThread = Thread();
 Thread resetProgramThread = Thread();
+Thread resetFeedThread = Thread();
 ThreadController threadCtr = ThreadController();
 
 float tMin = 25.5;
@@ -105,4 +106,8 @@ void loop() {
 
 void resetProgram() {
   funcReset();
+}
+
+void resetFeedToday() {
+  feedToday = false;
 }

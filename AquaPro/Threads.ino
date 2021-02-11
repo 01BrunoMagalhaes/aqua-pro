@@ -11,10 +11,14 @@ void initializeThreads() {
   resetProgramThread.onRun(resetProgram);
   resetProgramThread.setInterval(21600000); //6 hours
 
+  resetFeedThread.onRun(resetFeedToday);
+  resetFeedThread.setInterval(86400000); //24 hours
+
   threadCtr.add(&displayThread);
   threadCtr.add(&waterLevelThread);
   threadCtr.add(&tempControlThread);
   threadCtr.add(&resetProgramThread);
+  threadCtr.add(&resetFeedThread);
 }
 
 void threadsControl() {
