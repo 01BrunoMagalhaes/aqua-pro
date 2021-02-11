@@ -5,6 +5,7 @@
 #include <Thread.h>
 #include <ThreadController.h>
 #include <RtcDS3231.h>
+#include <Servo.h>
 
 #define DEBUG false
 
@@ -23,20 +24,30 @@ enum Screen { HOME, PLUGS, TEMP, ILUMINATION };
 #define relay3 32
 #define relayBoia 33
 
+#define SERVO_FEED_PORT 34
+#define btnManualFeed 35
+
 OneWire  sensorTemp(t);
 DallasTemperature sensors(&sensorTemp);
 DeviceAddress sensor1;
 RtcDS3231<TwoWire> Rtc(Wire);
 LiquidCrystal_I2C lcd(0x27, 16, 2);
+Servo servoFeed;
 
 Thread displayThread = Thread();
 Thread waterLevelThread = Thread();
 Thread tempControlThread = Thread();
+Thread resetProgramThread = Thread();
 ThreadController threadCtr = ThreadController();
 
 float tMin = 25.5;
 float tMax = 26.5;
 float tIdeal = 26;
+
+void (*funcReset) () = 0;
+
+boolean feedToday = false;
+String feedHour = "18:00";
 
 void setup() {
   Serial.begin(9600);
@@ -46,6 +57,7 @@ void setup() {
   initializeDisplay();
   initializeButtons();
   initializePlugs();
+  initializeFeed();
   initializeThreads();
 }
 
@@ -77,5 +89,20 @@ void loop() {
     delay(250);
   }
 
+  if (isButtonPressed(btnManualFeed)) {
+    if (DEBUG) Serial.println("Button " + String(btnManualFeed) + " pressed!");
+    feed(1);
+    delay(300);
+  }
+
+  if (feedHour.equals(clockTime()) && feedToday == false) {
+    feed(2);
+    feedToday = true;
+  }
+
   threadsControl();
+}
+
+void resetProgram() {
+  funcReset();
 }

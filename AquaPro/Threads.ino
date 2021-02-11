@@ -8,9 +8,13 @@ void initializeThreads() {
   tempControlThread.onRun(temperatureControl);
   tempControlThread.setInterval(1000);
 
+  resetProgramThread.onRun(resetProgram);
+  resetProgramThread.setInterval(21600000); //6 hours
+
   threadCtr.add(&displayThread);
   threadCtr.add(&waterLevelThread);
   threadCtr.add(&tempControlThread);
+  threadCtr.add(&resetProgramThread);
 }
 
 void threadsControl() {

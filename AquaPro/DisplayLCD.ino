@@ -20,7 +20,8 @@ void initializeDisplay() {
 }
 
 void displayDataThread() {
-  displayData(0);
+//  displayData(0);
+  displayHome();
 }
 
 void displayData(boolean next) {
