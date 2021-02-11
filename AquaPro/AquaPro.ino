@@ -27,6 +27,8 @@ enum Screen { HOME, PLUGS, TEMP, ILUMINATION };
 #define SERVO_FEED_PORT 34
 #define btnManualFeed 35
 
+#define btnDisplayLight 36
+
 OneWire  sensorTemp(t);
 DallasTemperature sensors(&sensorTemp);
 DeviceAddress sensor1;
@@ -49,6 +51,7 @@ void (*funcReset) () = 0;
 
 boolean feedToday = false;
 String feedHour = "18:00";
+boolean displayOff = true;
 
 void setup() {
   Serial.begin(9600);
@@ -101,6 +104,18 @@ void loop() {
     feedToday = true;
   }
 
+  if (isButtonPressed(btnDisplayLight)) {
+    if (DEBUG) Serial.println("Button " + String(btnDisplayLight) + " pressed!");
+    if (displayOff) {
+      turnDisplayOn();
+      displayOff = false;
+    } else {
+      turnDisplayOff();
+      displayOff = true;
+    }
+    delay(300);
+  }
+  
   threadsControl();
 }
 

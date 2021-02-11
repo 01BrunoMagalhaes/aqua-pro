@@ -6,6 +6,7 @@ void initializeButtons() {
   pinMode(btn3, INPUT_PULLUP);
   pinMode(btn4, INPUT_PULLUP);
   pinMode(btnManualFeed, INPUT_PULLUP);
+  pinMode(btnDisplayLight, INPUT_PULLUP);
   
   pinMode(waterSensor, INPUT);
 }

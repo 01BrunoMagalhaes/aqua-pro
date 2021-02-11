@@ -9,7 +9,7 @@ byte downChar[8] = {0b01110,0b01110,0b01110,0b01110,0b01110,0b11111,0b01110,0b00
 
 void initializeDisplay() {
   lcd.init();                      // inicializa LCD
-  turnDisplayOn();
+  turnDisplayOff();
 
   lcd.createChar(0, thermometer);
   lcd.createChar(1, customChar);
