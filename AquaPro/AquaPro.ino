@@ -100,7 +100,7 @@ void loop() {
   }
 
   if (feedHour.equals(clockTime()) && feedToday == false) {
-    feed(2);
+    feed(3);
     feedToday = true;
   }
 
